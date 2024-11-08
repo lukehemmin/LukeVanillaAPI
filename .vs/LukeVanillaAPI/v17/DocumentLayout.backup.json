@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|c:\\users\\administrator\\documents\\github\\lukevanillaapi\\discord\\authchat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|solutionrelative:discord\\authchat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|c:\\users\\administrator\\documents\\github\\lukevanillaapi\\discord\\discordbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|solutionrelative:discord\\discordbot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|c:\\users\\administrator\\documents\\github\\lukevanillaapi\\config.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|solutionrelative:config.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|c:\\users\\administrator\\documents\\github\\lukevanillaapi\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|solutionrelative:database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E9D8E273-72EF-4859-8674-EE5BF806A4BB}|LukeVanillaAPI.csproj|c:\\users\\administrator\\documents\\github\\lukevanillaapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -18,30 +30,69 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Config.cs",
+              "DocumentMoniker": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\Config.cs",
+              "RelativeDocumentMoniker": "Config.cs",
+              "ToolTip": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\Config.cs",
+              "RelativeToolTip": "Config.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-07T15:32:10.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Database.cs",
+              "DocumentMoniker": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\Database.cs",
+              "RelativeDocumentMoniker": "Database.cs",
+              "ToolTip": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\Database.cs",
+              "RelativeToolTip": "Database.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-07T15:31:42.967Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AuthChat.cs",
+              "DocumentMoniker": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\discord\\AuthChat.cs",
+              "RelativeDocumentMoniker": "discord\\AuthChat.cs",
+              "ToolTip": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\discord\\AuthChat.cs",
+              "RelativeToolTip": "discord\\AuthChat.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAowFAAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-07T13:28:15.696Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "DiscordBot.cs",
               "DocumentMoniker": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\discord\\DiscordBot.cs",
               "RelativeDocumentMoniker": "discord\\DiscordBot.cs",
               "ToolTip": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\discord\\DiscordBot.cs",
               "RelativeToolTip": "discord\\DiscordBot.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwEAAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-04T14:51:23.8Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\Administrator\\Documents\\GitHub\\LukeVanillaAPI\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-04T14:37:57.571Z",
               "EditorCaption": ""

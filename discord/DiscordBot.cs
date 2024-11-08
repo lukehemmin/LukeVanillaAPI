@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using LukeVanillaAPI.discord;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 
@@ -11,59 +12,24 @@ public class DiscordBot
 {
     private readonly DiscordSocketClient _client;
     private readonly IConfiguration _config;
+    private readonly AuthChat _authChat;
 
-    public DiscordBot()
+    public DiscordBot(IConfiguration config, AuthChat authChat, DiscordSocketClient client) // 수정된 부분
     {
-        _client = new DiscordSocketClient();
+        _config = config;
+        _authChat = authChat;
+        _client = client;
+
+        _client.LoginAsync(TokenType.Bot, _config["Discord:Token"]).Wait();
+        _client.StartAsync().Wait();
+
         _client.Log += LogAsync;
         _client.Ready += ReadyAsync;
         _client.MessageReceived += MessageReceivedAsync;
-
-        // appsettings.json 파일 확인 및 생성
-        var configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
-        if (!File.Exists(configFilePath))
-        {
-            var defaultConfig = new JObject(
-                new JProperty("Discord", new JObject(
-                    new JProperty("Token", "YOUR_BOT_TOKEN"),
-                    new JProperty("ApplicationId", "YOUR_APPLICATION_ID")
-                ))
-            );
-            File.WriteAllText(configFilePath, defaultConfig.ToString());
-            Console.WriteLine("appsettings.json 파일이 생성되었습니다. 봇 토큰과 애플리케이션 ID를 업데이트해주세요. ./appsettings.json");
-            Environment.Exit(0); // 설정 업데이트를 위해 프로그램 종료
-        }
-
-        // 설정 로드
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-        _config = builder.Build();
-
-        // 토큰 확인
-        var token = _config["Discord:Token"];
-        if (token == "YOUR_BOT_TOKEN")
-        {
-            Console.WriteLine("봇 토큰을 업데이트해주세요. ./appsettings.json");
-            Environment.Exit(0); // 설정 업데이트를 위해 프로그램 종료
-        }
-
-        // 애플리케이션 ID 확인
-        var appId = _config["Discord:ApplicationId"];
-        if (appId == "YOUR_APPLICATION_ID")
-        {
-            Console.WriteLine("애플리케이션 ID를 업데이트해주세요. ./appsettings.json");
-            Environment.Exit(0); // 설정 업데이트를 위해 프로그램 종료
-        }
     }
 
     public async Task RunAsync()
     {
-        var token = _config["Discord:Token"];
-
-        await _client.LoginAsync(TokenType.Bot, token);
-        await _client.StartAsync();
-
         // 터미널 입력 처리
         _ = Task.Run(async () =>
         {
@@ -107,13 +73,21 @@ public class DiscordBot
         return Task.CompletedTask;
     }
 
-    private async Task MessageReceivedAsync(SocketMessage message)
+    private Task MessageReceivedAsync(SocketMessage message)
     {
-        if (message.Author.IsBot) return;
+        if (message.Author.IsBot) return Task.CompletedTask;
+
+        Console.WriteLine($"수신된 메시지: '{message.Content}' from Channel ID: {message.Channel.Id}");
 
         if (message.Content == "!ping")
         {
-            await message.Channel.SendMessageAsync("Pong!");
+            return message.Channel.SendMessageAsync("Pong!");
+        }
+        else
+        {
+            // HandleAuthCodeAsync를 비동기적으로 실행
+            _ = _authChat.HandleAuthCodeAsync(message);
+            return Task.CompletedTask;
         }
     }
 }

@@ -4,7 +4,7 @@ using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.Extensions.Hosting;
 using LukeVanillaAPI.discord;
 using LukeVanillaAPI;
 
@@ -12,31 +12,30 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        var serviceCollection = new ServiceCollection();
-        ConfigureServices(serviceCollection);
+        var host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices((context, services) =>
+            {
+                var configuration = Config.InitializeConfiguration();
 
-        var serviceProvider = serviceCollection.BuildServiceProvider();
+                services.AddSingleton<IConfiguration>(configuration);
 
-        var bot = serviceProvider.GetRequiredService<DiscordBot>();
-        await bot.RunAsync();
-    }
+                services.AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
+                {
+                    GatewayIntents = GatewayIntents.Guilds |
+                                     GatewayIntents.GuildMessages |
+                                     GatewayIntents.MessageContent
+                }));
 
-    private static void ConfigureServices(IServiceCollection services)
-    {
-        var configuration = Config.InitializeConfiguration();
+                services.AddSingleton<Database>();
+                services.AddSingleton<AuthChat>();
+                services.AddSingleton<DiscordService>();
+                services.AddSingleton<DiscordBot>();
 
-        services.AddSingleton<IConfiguration>(configuration);
-        
-        // DiscordSocketClient를 올바른 Configuration으로 초기화
-        services.AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
-        {
-            GatewayIntents = GatewayIntents.Guilds |
-                             GatewayIntents.GuildMessages |
-                             GatewayIntents.MessageContent
-        }));
+                // 웹 API 서비스 등록
+                services.AddHostedService<WebApiService>();
+            })
+            .Build();
 
-        services.AddSingleton<Database>();
-        services.AddSingleton<AuthChat>();
-        services.AddSingleton<DiscordBot>();
+        await host.RunAsync();
     }
 }

@@ -2,45 +2,58 @@ package com.lukehemmin.lukeVanillaAPI.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
+import org.springframework.web.context.request.WebRequest
 import java.time.LocalDateTime
 
-@RestControllerAdvice
-class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
-
-    @ExceptionHandler(Exception::class)
-    fun handleAllExceptions(ex: Exception): ResponseEntity<ErrorResponse> {
-        val errorResponse = ErrorResponse(
-            timestamp = LocalDateTime.now(),
-            status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            error = "Internal Server Error",
-            message = ex.message ?: "An unexpected error occurred",
-            path = ""
-        )
-        return ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+@ControllerAdvice
+class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException::class)
-    fun handleResourceNotFoundException(ex: ResourceNotFoundException): ResponseEntity<ErrorResponse> {
-        val errorResponse = ErrorResponse(
-            timestamp = LocalDateTime.now(),
-            status = HttpStatus.NOT_FOUND.value(),
-            error = "Not Found",
-            message = ex.message ?: "Resource not found",
-            path = ""
+    fun handleResourceNotFoundException(ex: ResourceNotFoundException, request: WebRequest): ResponseEntity<ErrorDetails> {
+        val errorDetails = ErrorDetails(
+            LocalDateTime.now(),
+            ex.message ?: "Resource not found",
+            request.getDescription(false)
         )
-        return ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND)
+        return ResponseEntity(errorDetails, HttpStatus.NOT_FOUND)
+    }
+    
+    @ExceptionHandler(BadCredentialsException::class)
+    fun handleBadCredentialsException(ex: BadCredentialsException, request: WebRequest): ResponseEntity<ErrorDetails> {
+        val errorDetails = ErrorDetails(
+            LocalDateTime.now(),
+            ex.message ?: "Invalid credentials",
+            request.getDescription(false)
+        )
+        return ResponseEntity(errorDetails, HttpStatus.UNAUTHORIZED)
+    }
+    
+    @ExceptionHandler(IllegalStateException::class)
+    fun handleIllegalStateException(ex: IllegalStateException, request: WebRequest): ResponseEntity<ErrorDetails> {
+        val errorDetails = ErrorDetails(
+            LocalDateTime.now(),
+            ex.message ?: "Illegal state",
+            request.getDescription(false)
+        )
+        return ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST)
+    }
+    
+    @ExceptionHandler(Exception::class)
+    fun handleGlobalException(ex: Exception, request: WebRequest): ResponseEntity<ErrorDetails> {
+        val errorDetails = ErrorDetails(
+            LocalDateTime.now(),
+            ex.message ?: "Internal server error",
+            request.getDescription(false)
+        )
+        return ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }
 
-data class ErrorResponse(
+data class ErrorDetails(
     val timestamp: LocalDateTime,
-    val status: Int,
-    val error: String,
     val message: String,
-    val path: String
+    val details: String
 )
-
-class ResourceNotFoundException(message: String) : RuntimeException(message)

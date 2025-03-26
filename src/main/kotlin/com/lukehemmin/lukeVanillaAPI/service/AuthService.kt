@@ -1,5 +1,7 @@
 package com.lukehemmin.lukeVanillaAPI.service
 
+import com.lukehemmin.lukeVanillaAPI.dto.AuthCodeDto
+import com.lukehemmin.lukeVanillaAPI.dto.AuthValidationDto
 import com.lukehemmin.lukeVanillaAPI.exception.ResourceNotFoundException
 import com.lukehemmin.lukeVanillaAPI.model.PlayerAuth
 import com.lukehemmin.lukeVanillaAPI.model.PlayerData
@@ -19,51 +21,75 @@ class AuthService(
 ) {
 
     @Transactional
-    fun generateAuthCode(uuid: String): String {
-        // 이미 존재하는 AuthCode가 있는지 확인
+    fun generateAuthCode(uuid: String): AuthCodeDto {
+        // PlayerAuth 엔티티의 변경된 구조에 맞게 수정
         val existingAuth = playerAuthRepository.findByUuid(uuid)
+        
         if (existingAuth != null) {
-            return existingAuth.authCode
+            return AuthCodeDto(uuid = uuid, authCode = existingAuth.authCode)
+        } else {
+            // 새 인증 레코드 생성
+            val authCode = generateRandomAuthCode()
+            val playerAuth = PlayerAuth(
+                authCode = authCode,
+                uuid = uuid,
+                isAuth = false
+            )
+            
+            playerAuthRepository.save(playerAuth)
+            return AuthCodeDto(uuid = uuid, authCode = authCode)
         }
-
-        // 새로운 AuthCode 생성
-        val authCode = generateRandomAuthCode()
-        playerAuthRepository.save(PlayerAuth(authCode, uuid, false))
-        return authCode
     }
-
+    
     @Transactional
-    fun validateAuthCode(authCode: String, discordId: String): String {
-        val auth = playerAuthRepository.findById(authCode)
-            .orElseThrow { ResourceNotFoundException("Auth code not found: $authCode") }
-
-        // 이미 인증된 코드인 경우
-        if (auth.isAuth) {
+    fun validateAuthCode(authCode: String, discordId: String): Boolean {
+        val playerAuth = playerAuthRepository.findByAuthCode(authCode)
+            ?: throw BadCredentialsException("Invalid auth code")
+        
+        if (playerAuth.isAuth) {
             throw BadCredentialsException("Auth code already used")
         }
-
-        // 인증 처리
-        auth.isAuth = true
-        playerAuthRepository.save(auth)
-
-        // PlayerData에 DiscordID 업데이트
-        val playerData = playerDataRepository.findById(auth.uuid)
-            .orElseGet {
-                // UUID가 없는 경우 새로 생성
-                PlayerData(auth.uuid, "Unknown", null)
-            }
+        
+        // 이미 해당 디스코드 ID로 인증된 플레이어가 있는지 확인
+        val existingPlayer = playerDataRepository.findByDiscordId(discordId)
+        if (existingPlayer != null) {
+            throw BadCredentialsException("Discord ID already linked to another player")
+        }
+        
+        // PlayerData 업데이트 또는 생성
+        val playerData = playerDataRepository.findByUuid(playerAuth.uuid)
+            ?: PlayerData(uuid = playerAuth.uuid, nickname = "Unknown")
         
         playerData.discordId = discordId
         playerDataRepository.save(playerData)
-
-        // JWT 토큰 생성
-        return jwtTokenProvider.createToken(auth.uuid, listOf("USER"))
+        
+        // Auth 상태 업데이트
+        playerAuth.isAuth = true
+        playerAuthRepository.save(playerAuth)
+        
+        return true
     }
-
-    fun getPlayerByDiscordId(discordId: String): PlayerData? {
-        return playerDataRepository.findByDiscordId(discordId)
+    
+    @Transactional(readOnly = true)
+    fun getAuthStatus(uuid: String): Boolean {
+        val playerAuth = playerAuthRepository.findByUuid(uuid)
+            ?: return false
+        
+        return playerAuth.isAuth
     }
-
+    
+    @Transactional(readOnly = true)
+    fun getAuthRecordByCode(authCode: String): AuthValidationDto? {
+        val playerAuth = playerAuthRepository.findByAuthCode(authCode) ?: return null
+        
+        return AuthValidationDto(
+            uuid = playerAuth.uuid,
+            isAuth = playerAuth.isAuth,
+            authCode = playerAuth.authCode
+        )
+    }
+    
+    // 6자리 랜덤 인증 코드 생성 (숫자와 대문자)
     private fun generateRandomAuthCode(): String {
         val chars = ('A'..'Z') + ('0'..'9')
         return (1..6)

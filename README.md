@@ -17,10 +17,38 @@ LukeVanillaAPI는 Spring Boot 기반의 RESTful API 서버로, LukeVanilla 마�
 
 - **경제 시스템**
   - 플레이어 잔액 조회 (`/api/economy/balance/{uuid}`)
-  - 잔액 추가/차감 기능 (`/api/economy/balance/{uuid}/add`, `//api/economy/balance/{uuid}/remove`)
+  - 잔액 추가/차감 기능 (`/api/economy/balance/{uuid}/add`, `/api/economy/balance/{uuid}/remove`)
 
 - **플레이어 관리**
   - 디스코드 ID로 플레이어 정보 조회 (`/api/auth/player/discord/{discordId}`)
+
+- **지원/티켓 시스템**
+  - 플레이어 지원 요청 생성 (`/api/support/tickets`)
+  - 티켓 조회 및 관리 (`/api/support/tickets/{ticketId}`)
+  - 티켓 상태 업데이트 (`/api/support/tickets/{ticketId}/status`)
+  - 플레이어별 티켓 조회 (`/api/support/tickets/player/{playerUuid}`)
+
+- **플레이어 네임태그 시스템**
+  - 네임태그 스타일 조회 (`/api/nametag/styles`)
+  - 네임태그 구매 (`/api/nametag/purchase`)
+  - 네임태그 적용 (`/api/nametag/player/{playerUuid}/apply`)
+  - 플레이어 네임태그 조회 (`/api/nametag/player/{playerUuid}`)
+
+- **서버 로깅 및 모니터링**
+  - 서버 이벤트 로깅 (`/api/logs/events`)
+  - 성능 데이터 보고 (`/api/monitoring/performance`)
+  - 서버 통계 조회 (`/api/monitoring/stats`)
+
+- **채팅 관리 시스템**
+  - 채팅 메시지 로깅 (`/api/chat/logs`)
+  - 채팅 로그 조회 및 분석 (`/api/chat/logs?playerUuid={uuid}&channel={channel}`)
+
+- **이벤트 관리 시스템**
+  - 게임 이벤트 생성 (`/api/events`)
+  - 이벤트 참가자 등록 (`/api/events/{eventId}/participants`)
+  - 이벤트 보상 지급 (`/api/events/{eventId}/rewards`)
+  - 진행 중인 이벤트 조회 (`/api/events/active`)
+  - 이벤트 상세 정보 조회 (`/api/events/{eventId}`)
 
 ## LukeVanilla에서 API로 전환 필요한 기능
 
@@ -47,27 +75,31 @@ LukeVanillaAPI는 Spring Boot 기반의 RESTful API 서버로, LukeVanilla 마�
 
 ## 추가 개발 필요 기능
 
-1. **지원/티켓 시스템 API**
-   - 플레이어 지원 요청 생성/관리
-   - 관리자 응답 및 티켓 상태 업데이트
-   - 지원 이력 조회
+1. **지원/티켓 시스템 API 확장**
+   - 관리자 응답 및 티켓 에스컬레이션 기능
+   - 티켓 통계 및 분석 대시보드
+   - 정기적인 이슈 보고서 생성
 
-2. **플레이어 네임태그 확장 기능**
-   - 네임태그 커스터마이징 옵션 추가
-   - 구매 및 적용 API 제공
+2. **플레이어 네임태그 커스터마이징 고급 기능**
+   - 애니메이션 효과 추가
+   - 계절 및 이벤트 테마 네임태그
+   - 그룹별 특수 네임태그 적용
 
-3. **서버 로깅 및 모니터링 API**
-   - 서버 이벤트 로깅 시스템
-   - 성능 모니터링 엔드포인트
-   - 관리자용 통계 대시보드 API
+3. **로깅 및 모니터링 고급 기능**
+   - 실시간 알림 시스템
+   - 장기 데이터 분석 및 트렌드 보고
+   - 자동화된 문제 감지 및 대응
 
-4. **채팅 필터링 및 관리 기능**
-   - 비속어 필터링 룰 관리
-   - 채팅 로그 저장 및 분석
+4. **채팅 관리 고급 기능**
+   - 자동 필터링 및 유해 콘텐츠 감지
+   - 다국어 지원 및 번역 기능
+   - 채팅 패턴 분석 및 남용 감지
 
-5. **이벤트 관리 시스템**
-   - 서버 이벤트 생성 및 관리
-   - 이벤트 참가자 등록 및 보상 지급
+5. **이벤트 관리 고급 기능**
+   - 반복 이벤트 스케줄링
+   - 커스텀 이벤트 템플릿
+   - 참가자 자동 관리 및 알림
+   - 이벤트 리더보드 및 통계
 
 ## API 문서
 

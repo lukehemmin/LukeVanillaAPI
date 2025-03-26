@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface PlayerDataRepository : JpaRepository<PlayerData, String> {
+    fun findByUuid(uuid: String): PlayerData?
     fun findByDiscordId(discordId: String): PlayerData?
     fun existsByDiscordId(discordId: String): Boolean
 }
